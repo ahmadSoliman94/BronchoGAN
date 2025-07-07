@@ -11,7 +11,7 @@ BronchoGAN is a novel approach for generating realistic bronchoscopy (RB) images
 
 The key innovation is using depth images as an intermediate representation that enables robust domain-agnostic translation while preserving critical anatomical structures like bronchial orifices through dual segmentation constraints.
 
-<img src="./assets/bronchoscopy_pipeline.png" alt="Alt text" width="500" height="300">
+<img src="./assets/bronchoscopy_pipeline.png" alt="Alt text" width="700" height="500">
 
 ## Architecture Overview
 
