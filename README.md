@@ -521,7 +521,7 @@ def inference(self, label, inst, image=None):
 ```
 
 
-<img src="./assets/BronchoGAN_results-1.png" alt="Alt text" width="500" height="600">
+<img src="./assets/BronchoGAN_results-1.png" alt="Alt text" width="700" height="800">
 
 ## Model Benefits
 
