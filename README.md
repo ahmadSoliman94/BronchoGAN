@@ -486,7 +486,7 @@ checkpoints/bronchogan_depth2rb/
 ```
 
 
-<img src="./assets/During_training.png" alt="Alt text" width="400" height="100">
+<img src="./assets/During_training.png" alt="Alt text" width="600" height="300">
 
 
 ## Step 8: Testing and Inference
