@@ -1,507 +1,511 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy</title>
-    <meta name="description" content="The first diffusion-based video model that leverages Scene Graphs for both precise video synthesis and fine-grained human control in surgical simulation">
-    <meta name="author" content="Research Team">
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy">
+  <meta property="og:title" content="BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation"/>
+  <meta property="og:description" content="Novel approach for robust image translation across different bronchoscopy domains using anatomical constraints"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation">
+  <meta name="twitter:description" content="Novel approach for robust image translation across different bronchoscopy domains using anatomical constraints">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="bronchoscopy, GAN, image translation, medical imaging, computer vision, deep learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy</title>
+  <link rel="icon" type="image/x-icon" href="./assets/ico.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <style>
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 400;
+    }
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy">
-    <meta property="og:description" content="The first diffusion-based video model that leverages Scene Graphs for both precise video synthesis and fine-grained human control">
+    .author-block a {
+      color: #3273dc;
+      text-decoration: none;
+    }
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy">
+    .author-block a:hover {
+      text-decoration: underline;
+    }
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #3498db;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 0 80px;
-            text-align: center;
-            margin-top: 60px;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero .subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .authors {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            opacity: 0.95;
-        }
-        
-        .authors span {
-            margin: 0 5px;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 15px 30px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: all 0.3s;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        
-        .btn-primary {
-            background: #3498db;
-            border-color: #3498db;
-        }
-        
-        .btn-primary:hover {
-            background: #2980b9;
-            border-color: #2980b9;
-        }
-        
-        /* Sections */
-        .section {
-            padding: 80px 0;
-            background: #fff;
-        }
-        
-        .section:nth-child(even) {
-            background: #f8f9fa;
-        }
-        
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            color: #2c3e50;
-            text-align: center;
-        }
-        
-        .section-content {
-            max-width: 900px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        /* Abstract */
-        .abstract {
-            text-align: justify;
-            font-size: 1.15rem;
-            line-height: 1.8;
-            background: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* Video Section */
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            margin: 40px 0;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-        }
-        
-        /* Method Section */
-        .method-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .method-card {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .method-card h3 {
-            color: #3498db;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-        
-        /* Results Section */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-        
-        .result-item {
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .result-item:hover {
-            transform: translateY(-5px);
-        }
-        
-        .result-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .result-item .caption {
-            padding: 20px;
-            text-align: center;
-            font-weight: 500;
-        }
-        
-        /* Citation Box */
-        .citation-box {
-            background: #2c3e50;
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin: 40px 0;
-        }
-        
-        .citation-box h3 {
-            margin-bottom: 20px;
-            color: #3498db;
-        }
-        
-        .citation-box pre {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        .copy-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-        
-        .copy-btn:hover {
-            background: #2980b9;
-        }
-        
-        /* Footer */
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .section h2 {
-                font-size: 2rem;
-            }
-            
-            .method-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Placeholder for images */
-        .placeholder-img {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 1.1rem;
-            border-radius: 5px;
-        }
-    </style>
+    .teaser img {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    
+    pre code {
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Image Gallery Styles */
+    .image-gallery {
+      position: relative;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #f8f9fa;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .gallery-container {
+      position: relative;
+      width: 100%;
+      height: 700px;
+      overflow: hidden;
+    }
+
+    .gallery-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .gallery-slide.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: white;
+      border-radius: 8px;
+    }
+
+    /* Specific sizing for each image based on their content */
+    .gallery-slide:nth-child(1) img {
+      object-fit: contain;
+      max-height: 90%;
+    }
+
+    .gallery-slide:nth-child(2) img {
+      object-fit: contain;
+      max-height: 95%;
+      width: 100%;
+    }
+
+    .gallery-slide:nth-child(3) img {
+      object-fit: contain;
+      max-height: 95%;
+      width: 100%;
+    }
+
+    .gallery-controls {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .gallery-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .gallery-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .gallery-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .gallery-indicators {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: white;
+      transform: scale(1.2);
+    }
+
+    .image-counter {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 10;
+    }
+
+    .gallery-caption-below {
+      background: #f8f9fa;
+      border-radius: 0 0 12px 12px;
+      margin-top: -12px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">SG2VID</div>
-            <ul class="nav-links">
-                <li><a href="#abstract">Abstract</a></li>
-                <li><a href="#method">Method</a></li>
-                <li><a href="#results">Results</a></li>
-                <li><a href="#citation">Citation</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h1>SG2VID: Scene Graphs Enable Fine-Grained Control for Video Synthesis</h1>
-                <p class="subtitle">The first diffusion-based video model that leverages Scene Graphs for both precise video synthesis and fine-grained human control in surgical simulation</p>
-                <div class="authors">
-                    <span>Ahmad Soliman</span>, 
-                    <span>Ron Keuth</span>, 
-                    <span>Marian Himstedt</span>, 
-                </div>
-                <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">📄 Paper</a>
-                    <a href="#" class="btn">💻 Code</a>
-                    <a href="#" class="btn">🎥 Video</a>
-                    <a href="#" class="btn">📊 Data</a>
-                </div>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="https://arxiv.org/search/eess?searchtype=author&query=Soliman,+A" target="_blank">Ahmad Soliman</a><sup>1*</sup>,</span>
+                <span class="author-block">
+                  <a href="https://arxiv.org/search/eess?searchtype=author&query=Keuth,+R" target="_blank">Ron Keuth</a><sup>1*</sup>,</span>
+                  <span class="author-block">
+                    <a href="https://arxiv.org/search/eess?searchtype=author&query=Himstedt,+M" target="_blank">Marian Himstedt</a><sup>2</sup>
+                  </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">
+                      <sup>1</sup>Medical Informatics, University of Lübeck, Ratzeburger Allee 160, 23562 Lübeck, Germany<br>
+                      <sup>2</sup>Faculty of Electrical Engineering and Computer Science, University of Technology Lübeck, Mönkhofer Weg 239, 23909 Lübeck, Germany<br>
+                        <strong><a href="https://link.springer.com/journal/11548" target="_blank">IJCARS: IPCAI 2025</a></strong>
+                    </span>
+                  </div>
+
+                  <div class="is-size-6 publication-authors">
+                    <span class="author-block">
+                      <small>Contributing authors: <a href="mailto:marian.himstedt@th-luebeck.de">marian.himstedt@th-luebeck.de</a></small>
+                    </span>
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <span class="link-block">
+                        <a href="https://link.springer.com/article/10.1007/s11548-025-03450-w" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Journal Paper</span>
+                      </a>
+                    </span>
+
+                   <!-- ArXiv abstract Link -->
+                  <span class="link-block">
+                  <a href="https://doi.org/10.48550/arXiv.2507.01387" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ahmadSoliman94/BronchoGAN.git" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
             </div>
-        </section>
-
-        <section id="abstract" class="section">
-            <div class="container">
-                <h2>Abstract</h2>
-                <div class="section-content">
-                    <div class="abstract">
-                        Surgical simulation plays a pivotal role in training novice surgeons, accelerating their learning curve and reducing intra-operative errors. However, conventional simulation tools fall short in providing the necessary photorealism and the variability of human anatomy. In response, current methods are shifting towards generative model-based simulators. Yet, these approaches primarily focus on using increasingly complex conditioning for precise synthesis while neglecting the fine-grained human control aspect. To address this gap, we introduce SG2VID, the first diffusion-based video model that leverages Scene Graphs for both precise video synthesis and fine-grained human control. We demonstrate SG2VID's capabilities across three public datasets featuring cataract and cholecystectomy surgery. While SG2VID outperforms previous methods both qualitatively and quantitatively, it also enables precise synthesis, providing accurate control over tool and anatomy's size and movement, entrance of new tools, as well as the overall scene layout. We qualitatively motivate how SG2VID can be used for generative augmentation and present an experiment demonstrating its ability to improve a downstream phase detection task when the training set is extended with our synthetic videos. Finally, to showcase SG2VID's ability to retain human control, we interact with the Scene Graphs to generate new video samples depicting major yet rare intra-operative irregularities.
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="method" class="section">
-            <div class="container">
-                <h2>Method</h2>
-                <div class="section-content">
-                    <p>Our approach introduces a novel framework that combines scene graphs with diffusion models for controllable video synthesis in surgical contexts.</p>
-                    
-                    <div class="method-grid">
-                        <div class="method-card">
-                            <h3>Scene Graph Generation</h3>
-                            <p>We develop a structured representation of surgical scenes using scene graphs that capture spatial and temporal relationships between surgical instruments and anatomical structures.</p>
-                        </div>
-                        <div class="method-card">
-                            <h3>Diffusion-Based Synthesis</h3>
-                            <p>Our diffusion model is conditioned on scene graphs to generate realistic surgical videos with fine-grained control over object positioning and movement.</p>
-                        </div>
-                        <div class="method-card">
-                            <h3>Fine-Grained Control</h3>
-                            <p>The system allows precise manipulation of surgical tool trajectories, anatomical variations, and rare intra-operative scenarios for comprehensive training.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="results" class="section">
-            <div class="container">
-                <h2>Results</h2>
-                <div class="section-content">
-                    <p>SG2VID demonstrates superior performance across multiple surgical datasets, enabling precise control over video synthesis while maintaining high visual quality.</p>
-                    
-                    <div class="results-grid">
-                        <div class="result-item">
-                            <div class="placeholder-img">Cataract Surgery Results</div>
-                            <div class="caption">Cataract surgery video synthesis with controlled instrument movements</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="placeholder-img">Cholecystectomy Results</div>
-                            <div class="caption">Cholecystectomy procedure generation with anatomical variations</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="placeholder-img">Quantitative Comparison</div>
-                            <div class="caption">Quantitative evaluation showing improved performance metrics</div>
-                        </div>
-                        <div class="result-item">
-                            <div class="placeholder-img">User Study</div>
-                            <div class="caption">User study results demonstrating enhanced training effectiveness</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="citation" class="section">
-            <div class="container">
-                <h2>Citation</h2>
-                <div class="section-content">
-                    <div class="citation-box">
-                        <h3>BibTeX</h3>
-                        <pre><code>@article{sivakumar2025sg2vid,
-  title={SG2VID: Scene Graphs Enable Fine-Grained Control for Video Synthesis},
-  author={Sivakumar, Ssharvien Kumar and Frisch, Yannik and Ghazaei, Ghazal and Mukhopadhyay, Anirban},
-  journal={arXiv preprint arXiv:2506.03082},
-  year={2025}
-}</code></pre>
-                        <button class="copy-btn" onclick="copyCitation()">Copy Citation</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Research Team. All rights reserved.</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        function copyCitation() {
-            const citation = `@article{sivakumar2025sg2vid,
-  title={SG2VID: Scene Graphs Enable Fine-Grained Control for Video Synthesis},
-  author={Sivakumar, Ssharvien Kumar and Frisch, Yannik and Ghazaei, Ghazal and Mukhopadhyay, Anirban},
-  journal={arXiv preprint arXiv:2506.03082},
-  year={2025}
-}`;
-            
-            navigator.clipboard.writeText(citation).then(() => {
-                const btn = document.querySelector('.copy-btn');
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
-                btn.style.background = '#27ae60';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '#3498db';
-                }, 2000);
-            });
-        }
+<!-- Teaser image-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./assets/bronchoscopy_pipeline.png" alt="BronchoGAN Teaser" style="width: 100%; height: auto;">
+      <h2 class="subtitle has-text-centered">
+        <strong>BronchoGAN architecture:</strong> RGB input images from virtual bronchoscopy and phantom datasets are processed by depthAnything generating a depth image as intermediate representation. A cGAN is trained on this depth images synthesizing real bronchoscopy using a hierarchical pix2pixHD. The output is translated to a depth image again. Bronchial orifices are segmented from both, input and output depth images using.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser image -->
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The limited availability of bronchoscopy images makes image synthesis particularly interesting for training deep learning models. Robust image translation across different domains -- virtual bronchoscopy, phantom as well as in-vivo and ex-vivo image data -- is pivotal for clinical applications. This paper proposes BronchoGAN introducing anatomical constraints for image-to-image translation being integrated into a conditional GAN. In particular, we force bronchial orifices to match across input and output images. We further propose to use foundation model-generated depth images as intermediate representation ensuring robustness across a variety of input domains establishing models with substantially less reliance on individual training datasets. Moreover our intermediate depth image representation allows to easily construct paired image data for training. Our experiments showed that input images from different domains (e.g. virtual bronchoscopy, phantoms) can be successfully translated to images mimicking realistic human airway appearance. We demonstrated that anatomical settings (i.e. bronchial orifices) can be robustly preserved with our approach which is shown qualitatively and quantitatively by means of improved FID, SSIM and dice coefficients scores. Our anatomical constraints enabled an improvement in the Dice coefficient of up to 0.43 for synthetic images. Through foundation models for intermediate depth representations, bronchial orifice segmentation integrated as anatomical constraints into conditional GANs we are able to robustly translate images from different bronchoscopy input domains. BronchoGAN allows to incorporate public CT scan data (virtual bronchoscopy) in order to generate large-scale bronchoscopy image datasets with realistic appearance. BronchoGAN enables to bridge the gap of missing public bronchoscopy images.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Results Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Results</h2>
+        
+        <!-- Quantitative Results -->
+        <div class="content">
+          <h3 class="title is-4">Quantitative Results</h3>
+          <div class="columns is-multiline">
+            <div class="column is-full">
+              <img src="./assets/res.png" alt="Quantitative Results" style="width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+              <p class="has-text-centered" style="margin-top: 10px;">
+                <strong>Table 1:</strong> Quantitative results obtained for 2271 VB test images of the Harvard image dataset. Dice coefficients were estimated based on input and synthesized image bronchial orifice segmentations obtained with our training free pipeline. 
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Qualitative Results -->
+        <div class="content" style="margin-top: 3rem;">
+          <h3 class="title is-4">Qualitative Results</h3>
+          <div class="columns is-multiline">
+            <div class="column is-full">
+              <div class="image-gallery">
+                <div class="gallery-container">
+                  <!-- Image counter -->
+                  <div class="image-counter">
+                    <span id="currentImage">1</span> / <span id="totalImages">3</span>
+                  </div>
+
+                  <!-- Image slides -->
+                  <div class="gallery-slide active">
+                    <img src="./assets/CycleGAN_results-1.png" alt="Qualitative Result 1">
+                  </div>
+                  <div class="gallery-slide">
+                    <img src="./assets/BronchoGAN_results-1.png" alt="Qualitative Result 2">
+                  </div>
+                  <div class="gallery-slide">
+                    <img src="./assets/all_gan_results-1.png" alt="Qualitative Result 3">
+                  </div>
+
+                  <!-- Navigation controls -->
+                  <div class="gallery-controls">
+                    <button class="gallery-btn" id="prevBtn" onclick="changeSlide(-1)">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-btn" id="nextBtn" onclick="changeSlide(1)">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+
+                  <!-- Indicators -->
+                  <div class="gallery-indicators">
+                    <div class="indicator active" onclick="currentSlide(1)"></div>
+                    <div class="indicator" onclick="currentSlide(2)"></div>
+                    <div class="indicator" onclick="currentSlide(3)"></div>
+                  </div>
+
+                  <!-- Caption below gallery -->
+                </div>
+                <div class="gallery-caption-below">
+                  <p id="imageCaption" class="has-text-centered" style="margin-top: 20px; padding: 0 20px; font-size: 14px; line-height: 1.5; color: #333333;">
+                    <strong>Figure 2a:</strong> Qualitative results for baseline model CycleGAN. Input was an RGB image from VB and phantom datasets. Note that bronchial orifices are not preserved in multiple cases.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Results Section -->
+
+<!--BibTeX citation -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content has-text-centered">
+    <h2 class="title">BibTeX</h2>
+
+    <pre id="bibtex-block" style="
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      background-color: #f5f5f5;
+      padding: 12px 16px;
+      border-radius: 6px;
+      display: inline-block;
+      text-align: left;
+      max-width: 600px;
+    ">@article{soliman2025bronchogan,
+  title={BronchoGAN: Anatomically consistent and domain-agnostic image-to-image translation for video bronchoscopy},
+  author={Soliman, Ahmad and Keuth, Ron and Himstedt, Marian},
+  journal={International Journal of Computer Assisted Radiology and Surgery},
+  year={2025},
+  publisher={Springer},
+  doi={10.1007/s11548-025-03450-w}
+}</pre>
+
+    <br>
+    <button class="button is-small is-link" onclick="copyBibTeX()">Copy</button>
+    <p id="copy-message" style="font-size: 0.75rem; color: green; display: none; margin-top: 6px;">✔ Copied to clipboard</p>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.gallery-slide');
+const indicators = document.querySelectorAll('.indicator');
+const totalSlides = slides.length;
+
+// Image captions for each slide
+const captions = [
+  "<strong>Figure 2a:</strong> Qualitative results for baseline model CycleGAN. Input was an RGB image from VB and phantom datasets. Note that bronchial orifices are not preserved in multiple cases.",
+  "<strong>Figure 2b:</strong> Results obtained using our method BronchoGAN. It shows input RGB images (VB, RB, phantom), depth images inferred from input RGB images using depthAnything and extracted bronchial orifices thereof. Depth images were inferred again from the generated (GAN) output image. Anatomical constraints: Penalization depending on segmentation maps constructed from input's and output's depth images (dice loss).",
+  "<strong>Figure 2c:</strong> Qualitative comparison of our proposed models BronchoGAN and pix2pix depth vs. the baseline pix2pix base. Note that pix2pix base was unable to preserve input bronchial orifices in multiple cases. Also, domain gaps become apparent in row 2."
+];
+
+function showSlide(index) {
+  // Hide all slides
+  slides.forEach(slide => {
+    slide.classList.remove('active');
+  });
+  
+  // Remove active class from all indicators
+  indicators.forEach(indicator => {
+    indicator.classList.remove('active');
+  });
+  
+  // Show current slide
+  slides[index].classList.add('active');
+  indicators[index].classList.add('active');
+  
+  // Update caption
+  document.getElementById('imageCaption').innerHTML = captions[index];
+  
+  // Update counter
+  document.getElementById('currentImage').textContent = index + 1;
+  
+  // Update button states
+  document.getElementById('prevBtn').disabled = index === 0;
+  document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+}
+
+function changeSlide(direction) {
+  currentSlideIndex += direction;
+  
+  if (currentSlideIndex < 0) {
+    currentSlideIndex = 0;
+  } else if (currentSlideIndex >= totalSlides) {
+    currentSlideIndex = totalSlides - 1;
+  }
+  
+  showSlide(currentSlideIndex);
+}
+
+function currentSlide(index) {
+  currentSlideIndex = index - 1;
+  showSlide(currentSlideIndex);
+}
+
+// Initialize
+document.getElementById('totalImages').textContent = totalSlides;
+showSlide(0);
+
+// Keyboard navigation
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'ArrowLeft') {
+    changeSlide(-1);
+  } else if (event.key === 'ArrowRight') {
+    changeSlide(1);
+  }
+});
+
+  function copyBibTeX() {
+    const bibtexText = document.getElementById("bibtex-block").innerText;
+    navigator.clipboard.writeText(bibtexText).then(() => {
+      const msg = document.getElementById("copy-message");
+      msg.style.display = "block";
+      setTimeout(() => { msg.style.display = "none"; }, 2000);
+    });
+  }
+
+</script>
+
 </body>
 </html>
