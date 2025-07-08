@@ -2,7 +2,8 @@
 
 # BronchoGAN: Anatomically Consistent and Domain-Agnostic Image-to-Image Translation for Video Bronchoscopy
   Ahmad Soliman, Ron Keuth, Marian Himstedt
-  
+
+  [![Journal](https://img.shields.io/badge/IJCARS-2507.01387-b31b1b.svg)](https://doi.org/10.1007/s11548-025-03450-w)
   [![arXiv](https://img.shields.io/badge/arXiv-2507.01387-b31b1b.svg)](https://doi.org/10.48550/arXiv.2507.01387)
   [![Homepage](https://img.shields.io/badge/homepage-visit-blue)](https://yourname.github.io/SG2VID/)
 
