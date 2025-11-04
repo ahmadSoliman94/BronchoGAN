@@ -6,6 +6,8 @@
   [![Journal](https://img.shields.io/badge/IJCARS-2507.01387-b31b1b.svg)](https://doi.org/10.1007/s11548-025-03450-w)
   [![arXiv](https://img.shields.io/badge/arXiv-2507.01387-b21b1b.svg)](https://doi.org/10.48550/arXiv.2507.01387)
   [![Homepage](https://img.shields.io/badge/homepage-visit-blue)](https://ahmadsoliman94.github.io/BronchoGAN/)
+  [![Download Model](https://img.shields.io/badge/Model-BronchoGAN%20Weights-blue.svg)](https://cloud.th-luebeck.de/index.php/s/bqP59rHKQWfMNom)
+
 
 </div>
 
@@ -532,13 +534,7 @@ def inference(self, label, inst, image=None):
 
 <img src="./assets/BronchoGAN_results-1.png" alt="Alt text" width="700" height="800">
 
-## Pre-trained Model
 
-You can download the pre-trained **BronchoGAN** model here:
-
-[![Download Model](https://img.shields.io/badge/Model-BronchoGAN%20Weights-blue.svg)](https://cloud.th-luebeck.de/index.php/s/bqP59rHKQWfMNom)
-
-Place the downloaded `.pth` file in the `models/` directory:
 
 ## Model Benefits
 
