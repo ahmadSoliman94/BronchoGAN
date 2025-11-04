@@ -532,6 +532,14 @@ def inference(self, label, inst, image=None):
 
 <img src="./assets/BronchoGAN_results-1.png" alt="Alt text" width="700" height="800">
 
+## Pre-trained Model
+
+You can download the pre-trained **BronchoGAN** model here:
+
+[![Download Model](https://img.shields.io/badge/Model-BronchoGAN%20Weights-blue.svg)](https://cloud.th-luebeck.de/index.php/s/bqP59rHKQWfMNom)
+
+Place the downloaded `.pth` file in the `models/` directory:
+
 ## Model Benefits
 
 1. **Dual Segmentation Constraints**: Uses both RGB-based (LiteRASPP) and depth-based (ZSegmentationExtractor) segmentation for robust anatomical preservation
