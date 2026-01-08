@@ -23,10 +23,10 @@ You need two models:
 
 **a) Depth Anything V2 Model (335M parameters)**
 - Download: [depth_anything_v2_vitl.pth](https://huggingface.co/depth-anything/Depth-Anything-V2-Large/resolve/main/depth_anything_v2_vitl.pth)
-- Place in: `/home/ahmad/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth`
+- Place in: `/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth`
 
 **b) BronchoGAN Generator Model**
-- Already in: `/home/ahmad/BronchoGAN/Models/latest_net_G.pth` ✓
+- Already in: `/BronchoGAN/Models/latest_net_G.pth` 
 
 ---
 
@@ -44,7 +44,7 @@ import cv2
 import torch
 import numpy as np
 import sys
-sys.path.insert(0, '/home/ahmad/BronchoGAN/Depth-Anything-V2')
+sys.path.insert(0, '/BronchoGAN/Depth-Anything-V2')
 from depth_anything_v2.dpt import DepthAnythingV2
 
 # Setup device
@@ -58,7 +58,7 @@ model_configs = {
 # Load model
 encoder = 'vitl'
 model = DepthAnythingV2(**model_configs[encoder])
-model.load_state_dict(torch.load('/home/ahmad/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth', map_location='cpu'))
+model.load_state_dict(torch.load('/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth', map_location='cpu'))
 model = model.to(DEVICE).eval()
 
 # Process single image
@@ -88,8 +88,8 @@ def extract_depth(image_path, output_path):
 
 # Example usage
 depth_map, inverted = extract_depth(
-    '/home/ahmad/BronchoGAN/example.png',
-    '/home/ahmad/BronchoGAN/example_depth.png'
+    '/BronchoGAN/example.png',
+    '/BronchoGAN/example_depth.png'
 )
 ```
 
@@ -108,13 +108,13 @@ depth_map, inverted = extract_depth(
 #### Method 1: Using Command Line
 
 ```bash
-cd /home/ahmad/BronchoGAN/pix2pixHD
+cd /BronchoGAN/pix2pixHD
 
 # Create test data folder
 mkdir -p test_data/test_A
 
 # Copy depth image
-cp /home/ahmad/BronchoGAN/example_depth.png test_data/test_A/
+cp /BronchoGAN/example_depth.png test_data/test_A/
 
 # Run generation
 python test.py \
@@ -146,7 +146,7 @@ python test.py \
 
 ```python
 import sys
-sys.path.insert(0, '/home/ahmad/BronchoGAN/pix2pixHD')
+sys.path.insert(0, '/BronchoGAN/pix2pixHD')
 
 import torch
 import cv2
@@ -167,7 +167,7 @@ opt.netG = 'global'
 opt.n_blocks_local = 2
 opt.n_blocks_global = 2
 opt.n_local_enhancers = 2
-opt.checkpoints_dir = '/home/ahmad/BronchoGAN/Models'
+opt.checkpoints_dir = '/BronchoGAN/Models'
 opt.name = 'latest'
 opt.which_epoch = 'latest'
 
@@ -177,7 +177,7 @@ model = create_model(opt)
 print("✓ Model loaded!")
 
 # Load depth image
-depth_img = cv2.imread('/home/ahmad/BronchoGAN/example_depth.png')
+depth_img = cv2.imread('/BronchoGAN/example_depth.png')
 depth_img = cv2.resize(depth_img, (128, 128))  # Resize to model input size
 
 # Convert to tensor
@@ -211,8 +211,8 @@ import numpy as np
 import sys
 
 # Add paths
-sys.path.insert(0, '/home/ahmad/BronchoGAN/Depth-Anything-V2')
-sys.path.insert(0, '/home/ahmad/BronchoGAN/pix2pixHD')
+sys.path.insert(0, '/BronchoGAN/Depth-Anything-V2')
+sys.path.insert(0, '/BronchoGAN/pix2pixHD')
 
 from depth_anything_v2.dpt import DepthAnythingV2
 from options.test_options import TestOptions
@@ -224,13 +224,13 @@ print("Step 1: Loading Depth Anything V2...")
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 model_configs = {'vitl': {'encoder': 'vitl', 'features': 256, 'out_channels': [256, 512, 1024, 1024]}}
 depth_model = DepthAnythingV2(**model_configs['vitl'])
-depth_model.load_state_dict(torch.load('/home/ahmad/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth', map_location='cpu'))
+depth_model.load_state_dict(torch.load('/BronchoGAN/Depth-Anything-V2/depth_anything_v2_vitl.pth', map_location='cpu'))
 depth_model = depth_model.to(DEVICE).eval()
 print("✓ Depth model loaded")
 
 # ==== STEP 2: Extract Depth ====
 print("\nStep 2: Extracting depth from image...")
-input_image_path = '/home/ahmad/BronchoGAN/example.png'
+input_image_path = '/BronchoGAN/example.png'
 raw_img = cv2.imread(input_image_path, cv2.IMREAD_COLOR)
 depth = depth_model.infer_image(raw_img)
 
@@ -238,7 +238,7 @@ depth = depth_model.infer_image(raw_img)
 depth_vis = (depth - depth.min()) / (depth.max() - depth.min()) * 255
 depth_vis = depth_vis.astype(np.uint8)
 depth_colored = cv2.applyColorMap(depth_vis, cv2.COLORMAP_VIRIDIS)
-cv2.imwrite('/home/ahmad/BronchoGAN/depth_output.png', depth_colored)
+cv2.imwrite('/BronchoGAN/depth_output.png', depth_colored)
 print("✓ Depth extracted and saved")
 
 # ==== STEP 3: Load GAN Model ====
@@ -251,10 +251,10 @@ opt.no_flip = True
 opt.label_nc = 0
 opt.no_instance = True
 opt.netG = 'global'
-opt.n_blocks_local = 2
-opt.n_blocks_global = 2
-opt.n_local_enhancers = 2
-opt.checkpoints_dir = '/home/ahmad/BronchoGAN/Models'
+opt.n_blocks_local = 2 # must be always 2
+opt.n_blocks_global = 2  # must be always 2
+opt.n_local_enhancers = 2 # must be always 2  
+opt.checkpoints_dir = '/BronchoGAN/Models'
 opt.name = 'latest'
 gan_model = create_model(opt)
 print("✓ GAN model loaded")
@@ -270,7 +270,7 @@ with torch.no_grad():
     fake_image, segmentation_mask = gan_model.inference(depth_tensor, inst_tensor, None)
 
 output = util.tensor2im(fake_image.data[0])
-cv2.imwrite('/home/ahmad/BronchoGAN/final_broncho.png', output)
+cv2.imwrite('/BronchoGAN/final_broncho.png', output)
 print("✓ Synthetic bronchoscopy saved: final_broncho.png")
 print("\n✓✓✓ COMPLETE! ✓✓✓")
 ```
@@ -299,7 +299,7 @@ print("\n✓✓✓ COMPLETE! ✓✓✓")
 ### Error: "No module named 'models.depth_anything_v2'"
 **Solution**: The symlink is missing. Create it:
 ```bash
-cd /home/ahmad/BronchoGAN/pix2pixHD/models
+cd /BronchoGAN/pix2pixHD/models
 ln -s ../../Depth-Anything-V2/depth_anything_v2 depth_anything_v2
 ```
 
@@ -355,11 +355,11 @@ BronchoGAN/
 
 ```bash
 # 1. Convert image to depth
-cd /home/ahmad/BronchoGAN/Depth-Anything-V2
-# Run: See test.ipynb
+cd /BronchoGAN/Depth-Anything-V2
+
 
 # 2. Generate bronchoscopy from depth
-cd /home/ahmad/BronchoGAN/pix2pixHD
+cd /BronchoGAN/pix2pixHD
 mkdir -p test_data/test_A
 cp ../example_depth.png test_data/test_A/
 
